@@ -75,7 +75,7 @@ if uploaded_file is not None:
     for i, file in enumerate(output_files):
         with open(file, "rb") as f:
             st.download_button(
-                label=f"Tải chương {i+1}",
+                label=f"Tải chương {i}",
                 data=f,
                 file_name=os.path.basename(file),
                 mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
