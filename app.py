@@ -19,10 +19,11 @@ def clean_text_for_word(text):
     cleaned_text = cleaned_text.replace("\r\n", " ").replace("\n", " ").replace("\r", " ").strip()
     return cleaned_text
 
-# Hàm chia văn bản thành các chương
+# Hàm chia văn bản thành các chương dựa trên tên chương "Chương I", "Chương II", v.v.
 def split_into_chapters(text):
-    # Tìm các phần có dấu hiệu bắt đầu chương: "CHƯƠNG X" hoặc "Chương X"
-    chapters = re.split(r'(CHƯƠNG\s+\d+)', text)
+    # Tìm các phần có dấu hiệu bắt đầu chương: "Chương I", "Chương II", ...
+    chapters = re.split(r'(Chương\s+[IVXLCDM]+)', text)
+    
     # Tạo danh sách các chương và loại bỏ các phần không cần thiết (kể cả phần đầu là rỗng)
     chapters = [chapter.strip() for chapter in chapters if chapter.strip()]
     
