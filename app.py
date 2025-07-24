@@ -3,7 +3,6 @@ import os
 from PyPDF2 import PdfReader
 from docx import Document
 import streamlit as st
-from io import BytesIO
 
 # Hàm trích xuất văn bản từ file PDF
 def extract_text_from_pdf(pdf_file):
@@ -22,11 +21,20 @@ def clean_text_for_word(text):
 
 # Hàm chia văn bản thành các chương
 def split_into_chapters(text):
-    chapters = []
-    parts = re.split(r'CHƯƠNG\s+\w+', text)
-    for part in parts[1:]:
-        chapters.append(part.strip())
-    return chapters
+    # Tìm các phần có dấu hiệu bắt đầu chương: "CHƯƠNG X" hoặc "Chương X"
+    chapters = re.split(r'(CHƯƠNG\s+\d+)', text)
+    # Tạo danh sách các chương và loại bỏ các phần không cần thiết (kể cả phần đầu là rỗng)
+    chapters = [chapter.strip() for chapter in chapters if chapter.strip()]
+    
+    # Nếu chương có thể chứa phần đầu tiên, ta cần ghép lại để hoàn thiện
+    chapter_list = []
+    for i in range(0, len(chapters), 2):
+        if i+1 < len(chapters):
+            chapter_list.append(chapters[i] + "\n" + chapters[i+1])
+        else:
+            chapter_list.append(chapters[i])
+    
+    return chapter_list
 
 # Hàm lưu các chương vào file Word
 def save_chapters_as_word(chapters):
